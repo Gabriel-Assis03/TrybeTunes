@@ -49,6 +49,13 @@ class App extends Component {
     }));
   };
 
+  resetArtist = () => {
+    this.setState((prev) => ({
+      ...prev,
+      artistSearch: '',
+    }));
+  };
+
   checkSearch = () => {
     const { artistSearch } = this.state;
     const two = 2;
@@ -85,6 +92,7 @@ class App extends Component {
               onInputChangeSearch={ this.handleChangeSearch }
               value={ artistSearch }
               disabledBut={ this.checkSearch() }
+              reset={ this.resetArtist }
             />
           </Route>
           <Route exact path="/album/:id" component={ Album } />
