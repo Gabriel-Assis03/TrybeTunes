@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 // componentes
 import Header from '../components/Header';
@@ -97,5 +98,12 @@ class Search extends Component {
     );
   }
 }
+
+Search.propTypes = {
+  value: PropTypes.string.isRequired,
+  disabledBut: PropTypes.bool.isRequired,
+  onInputChangeSearch: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+};
 
 export default Search;
