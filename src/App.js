@@ -16,6 +16,7 @@ class App extends Component {
     this.state = {
       userName: '',
       login: false,
+      artistSearch: '',
     };
   }
 
@@ -40,8 +41,22 @@ class App extends Component {
     return userName.length < tree;
   };
 
+  handleChangeSearch = ({ target }) => {
+    const { value } = target;
+    this.setState((prev) => ({
+      ...prev,
+      artistSearch: value,
+    }));
+  };
+
+  checkSearch = () => {
+    const { artistSearch } = this.state;
+    const two = 2;
+    return artistSearch.length < two;
+  };
+
   render() {
-    const { userName, login } = this.state;
+    const { userName, login, artistSearch } = this.state;
     return (
       <div>
         <p>TrybeTunes</p>
@@ -65,7 +80,13 @@ class App extends Component {
               onInputChangeName={ this.handleChangeName }
             />}
           </Route>
-          <Route exact path="/search" component={ Search } />
+          <Route exact path="/search">
+            <Search
+              onInputChangeSearch={ this.handleChangeSearch }
+              value={ artistSearch }
+              disabledBut={ this.checkSearch() }
+            />
+          </Route>
           <Route exact path="/album/:id" component={ Album } />
           <Route exact path="/favorites" component={ Favorites } />
           <Route exact path="/profile" component={ Profile } />
