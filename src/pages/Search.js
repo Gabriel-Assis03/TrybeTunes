@@ -8,6 +8,9 @@ class Search extends Component {
     return (
       <div data-testid="page-search">
         <Header />
+        <form>
+          <input data-testid="search-artist-input" type="text" placeholder="Pesquisar" />
+        </form>
       </div>
     );
   }

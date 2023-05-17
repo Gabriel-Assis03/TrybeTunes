@@ -13,18 +13,19 @@ class Login extends Component {
 
   onClick = () => {
     const { userName, login } = this.props;
-    const mil = 1000;
     this.setState((prev) => ({
       ...prev,
       loading: true,
     }));
-    const c = new Promise((resolve) => {
-      createUser({ name: userName });
-      setTimeout(() => {
-        resolve(login());
-      }, mil);
-    });
-    console.log(c);
+    // const mil = 1000;
+    // const c = new Promise((resolve) => {
+    //   createUser({ name: userName });
+    //   setTimeout(() => {
+    //     resolve(login());
+    //   }, mil);
+    // });
+    // console.log(c);
+    createUser({ name: userName }).then(() => login());
   };
 
   render() {
@@ -34,26 +35,27 @@ class Login extends Component {
       <div data-testid="page-login">
         {
           loading ? <h1>Carregando...</h1>
-            : <>
-              <label htmlFor="name">
+            : (
+              <>
                 <input
                   type="text"
                   data-testid="login-name-input"
                   name="name"
                   value={ userName }
                   onChange={ onInputChangeName }
+                  placeholder="Nome"
                 />
-              </label>
-              <button
-                data-testid="login-submit-button"
-                name="entrar"
-                title="Entrar"
-                disabled={ disabledBut }
-                onClick={ this.onClick }
-              >
-                Entrar
-              </button>
-            </>
+                <button
+                  data-testid="login-submit-button"
+                  name="entrar"
+                  title="Entrar"
+                  disabled={ disabledBut }
+                  onClick={ this.onClick }
+                >
+                  Entrar
+                </button>
+              </>
+            )
         }
 
       </div>
