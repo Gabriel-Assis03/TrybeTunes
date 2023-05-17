@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createUser } from '../services/userAPI';
 
 class Login extends Component {
@@ -23,6 +24,7 @@ class Login extends Component {
         resolve(login());
       }, mil);
     });
+    console.log(c);
   };
 
   render() {
@@ -31,8 +33,7 @@ class Login extends Component {
     return (
       <div data-testid="page-login">
         {
-          loading
-            ? <h1>Carregando...</h1>
+          loading ? <h1>Carregando...</h1>
             : <>
               <label htmlFor="name">
                 <input
@@ -59,5 +60,12 @@ class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  userName: PropTypes.string.isRequired,
+  disabledBut: PropTypes.bool.isRequired,
+  onInputChangeName: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+};
 
 export default Login;
