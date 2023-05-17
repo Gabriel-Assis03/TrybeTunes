@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Login from './pages/Login';
 import Album from './pages/Album';
@@ -15,6 +15,7 @@ class App extends Component {
 
     this.state = {
       userName: '',
+      login: false,
     };
   }
 
@@ -26,6 +27,13 @@ class App extends Component {
     }));
   };
 
+  loginValidation = () => {
+    this.setState((prev) => ({
+      ...prev,
+      login: true,
+    }));
+  };
+
   checkName = () => {
     const { userName } = this.state;
     const tree = 3;
@@ -33,12 +41,12 @@ class App extends Component {
   };
 
   render() {
-    const { userName } = this.state;
+    const { userName, login } = this.state;
     return (
       <div>
         <p>TrybeTunes</p>
         <Switch>
-          <Route
+          {/* <Route
             exact
             path="/"
             render={ () => (
@@ -48,7 +56,15 @@ class App extends Component {
                 onInputChangeName={ this.handleChangeName }
               />
             ) }
-          />
+          /> */}
+          <Route exact path="/">
+            { login ? <Redirect to="/search" /> : <Login
+              userName={ userName }
+              login={ this.loginValidation }
+              disabledBut={ this.checkName() }
+              onInputChangeName={ this.handleChangeName }
+            />}
+          </Route>
           <Route exact path="/search" component={ Search } />
           <Route exact path="/album/:id" component={ Album } />
           <Route exact path="/favorites" component={ Favorites } />
