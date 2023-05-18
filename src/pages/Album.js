@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../components/MusicCard';
+import { addSong } from '../services/favoriteSongsAPI';
 
 class Album extends Component {
   constructor() {
@@ -14,8 +15,24 @@ class Album extends Component {
       infosAlbum: '',
       data: '',
       loadingData: false,
+      loadingFav: true,
     };
   }
+
+  favorite = () => {
+    const { data } = this.state;
+    this.setState((prev) => ({
+      ...prev,
+      loadingFav: false,
+    }));
+    addSong(data)
+      .then(() => {
+        this.setState((prev) => ({
+          ...prev,
+          loadingFav: true,
+        }));
+      });
+  };
 
   render() {
     const {
@@ -45,12 +62,22 @@ class Album extends Component {
           loadingData: true,
         }));
       });
-    const { infosAlbum, data, loadingData } = this.state;
+    const { infosAlbum, data, loadingData, loadingFav } = this.state;
     return (
       <div data-testid="page-album">
-        <Header />
-        { infosAlbum }
-        {loadingData ? <MusicCard data={ data } /> : <p>Carregando...</p>}
+        {
+          loadingFav
+            ? (
+              <>
+                <Header />
+                { infosAlbum }
+                {loadingData
+                  ? <MusicCard data={ data } favorite={ this.favorite } />
+                  : <p>Carregando...</p>}
+              </>
+            )
+            : (<h1>Carregando...</h1>)
+        }
       </div>
     );
   }
