@@ -13,7 +13,7 @@ class Album extends Component {
     this.state = {
       infosAlbum: '',
       data: '',
-      loadingData: true,
+      loadingData: false,
     };
   }
 
@@ -42,7 +42,7 @@ class Album extends Component {
         this.setState((prev) => ({
           ...prev,
           data,
-          loadingData: false,
+          loadingData: true,
         }));
       });
     const { infosAlbum, data, loadingData } = this.state;
@@ -50,7 +50,7 @@ class Album extends Component {
       <div data-testid="page-album">
         <Header />
         { infosAlbum }
-        {loadingData || <MusicCard data={ data } />}
+        {loadingData ? <MusicCard data={ data } /> : <p>Carregando...</p>}
       </div>
     );
   }
