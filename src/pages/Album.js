@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 // componentes
 import Header from '../components/Header';
@@ -54,5 +55,13 @@ class Album extends Component {
     );
   }
 }
+
+Album.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
+};
 
 export default Album;
