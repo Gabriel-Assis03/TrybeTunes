@@ -19,13 +19,14 @@ class Album extends Component {
     };
   }
 
-  favorite = () => {
+  favorite = (id) => {
     const { data } = this.state;
     this.setState((prev) => ({
       ...prev,
       loadingFav: false,
     }));
-    addSong(data)
+    const music = data.filter((e) => e.trackId === id);
+    addSong(music[0])
       .then(() => {
         this.setState((prev) => ({
           ...prev,
@@ -40,7 +41,6 @@ class Album extends Component {
         params: { id },
       },
     } = this.props;
-    // getMusics(id).then((e) => console.log(e));
     getMusics(id)
       .then((data) => (
         <div key={ data[0].collectionId }>
@@ -72,7 +72,21 @@ class Album extends Component {
                 <Header />
                 { infosAlbum }
                 {loadingData
-                  ? <MusicCard data={ data } favorite={ this.favorite } />
+                  ? (
+                    data.map((e, index) => {
+                      const { trackId, trackName, previewUrl } = e;
+                      if (index !== 0) {
+                        return (<MusicCard
+                          key={ trackId }
+                          trackId={ trackId }
+                          trackName={ trackName }
+                          previewUrl={ previewUrl }
+                          favorite={ this.favorite }
+                        />);
+                      }
+                      return null;
+                    })
+                  )
                   : <p>Carregando...</p>}
               </>
             )

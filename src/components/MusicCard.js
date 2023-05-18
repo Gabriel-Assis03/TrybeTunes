@@ -1,13 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 class MusicCard extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      checked: false,
+    };
+  }
+
   render() {
-    const { data, favorite } = this.props;
-    const listMusic = data.map((e) => (
-      <div key={ e.trackId }>
-        <p>{ e.trackName }</p>
-        <audio data-testid="audio-component" src={ e.previewUrl } controls>
+    const { checked } = this.state;
+    const { trackId, trackName, previewUrl, favorite } = this.props;
+    getFavoriteSongs()
+      .then((listFav) => {
+        const checkFavSong = listFav.some((e) => e.trackId === trackId);
+        this.setState((prev) => ({
+          ...prev,
+          checked: checkFavSong,
+        }));
+      });
+    console.log(listFav);
+    return (
+      <div>
+        <p>{ trackName }</p>
+        <audio data-testid="audio-component" src={ previewUrl } controls>
           <track kind="captions" />
           O seu navegador não suporta o elemento
           {' '}
@@ -15,19 +34,23 @@ class MusicCard extends Component {
           <code>audio</code>
           .
         </audio>
-        <label data-testid={ `checkbox-music-${e.trackId}` }>
+        <label data-testid={ `checkbox-music-${trackId}` }>
           Favorita
-          <input type="checkbox" onChange={ favorite } />
+          <input
+            type="checkbox"
+            onClick={ () => favorite(trackId) }
+            checked={ checked }
+          />
         </label>
       </div>
-    ));
-    // listMusic.shift();
-    return listMusic;
+    );
   }
 }
 
 MusicCard.propTypes = {
-  data: PropTypes.string.isRequired,
+  trackId: PropTypes.string.isRequired,
+  trackName: PropTypes.string.isRequired,
+  previewUrl: PropTypes.string.isRequired,
   favorite: PropTypes.func.isRequired,
 };
 
