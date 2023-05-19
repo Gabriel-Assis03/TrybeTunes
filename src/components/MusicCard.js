@@ -22,7 +22,6 @@ class MusicCard extends Component {
           checked: checkFavSong,
         }));
       });
-    console.log(listFav);
     return (
       <div>
         <p>{ trackName }</p>
