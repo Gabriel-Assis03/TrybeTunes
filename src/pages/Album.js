@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../components/MusicCard';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 
 class Album extends Component {
   constructor() {
@@ -25,13 +25,29 @@ class Album extends Component {
       ...prev,
       loadingFav: false,
     }));
-    const music = data.filter((e) => e.trackId === id);
-    addSong(music[0])
-      .then(() => {
-        this.setState((prev) => ({
-          ...prev,
-          loadingFav: true,
-        }));
+    getFavoriteSongs()
+      .then((listFav) => {
+        const checkFavSong = listFav.some((e) => e.trackId === id);
+        console.log(checkFavSong);
+        if (!checkFavSong) {
+          const music = data.filter((e) => e.trackId === id);
+          addSong(music[0])
+            .then(() => {
+              this.setState((prev) => ({
+                ...prev,
+                loadingFav: true,
+              }));
+            });
+        } else {
+          const music = data.filter((e) => e.trackId === id);
+          removeSong(music[0])
+            .then(() => {
+              this.setState((prev) => ({
+                ...prev,
+                loadingFav: true,
+              }));
+            });
+        }
       });
   };
 
