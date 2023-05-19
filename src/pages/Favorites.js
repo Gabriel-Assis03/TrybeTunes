@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 // componentes
 import Header from '../components/Header';
 import MusicCard from '../components/MusicCard';
-import { getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 
 class Favorites extends Component {
   constructor() {
@@ -14,6 +14,18 @@ class Favorites extends Component {
       loadingData: false,
     };
   }
+
+  removeFav = (id) => {
+    const { data } = this.state;
+    const music = data.filter((e) => e.trackId === id);
+    removeSong(music[0])
+      .then(() => {
+        this.setState((prev) => ({
+          ...prev,
+          loadingFav: true,
+        }));
+      });
+  };
 
   render() {
     const { data, loadingData } = this.state;
@@ -31,18 +43,15 @@ class Favorites extends Component {
         <div>
           {loadingData
             ? (
-              data.map((e, index) => {
+              data.map((e) => {
                 const { trackId, trackName, previewUrl } = e;
-                if (index !== 0) {
-                  return (<MusicCard
-                    key={ trackId }
-                    trackId={ trackId }
-                    trackName={ trackName }
-                    previewUrl={ previewUrl }
-                    favorite={ this.favorite }
-                  />);
-                }
-                return null;
+                return (<MusicCard
+                  key={ trackId }
+                  trackId={ trackId }
+                  trackName={ trackName }
+                  previewUrl={ previewUrl }
+                  favorite={ this.removeFav }
+                />);
               })
             )
             : <p>Carregando...</p>}
