@@ -91,6 +91,7 @@ class Album extends Component {
       .then((list) => {
         this.setState((prev) => ({
           ...prev,
+          loadingFav: true,
           favoritsMusic: list,
         }));
       });
