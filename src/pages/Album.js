@@ -16,6 +16,7 @@ class Album extends Component {
       data: '',
       loadingData: false,
       loadingFav: true,
+      favoritsMusic: [],
     };
   }
 
@@ -33,19 +34,27 @@ class Album extends Component {
           const music = data.filter((e) => e.trackId === id);
           addSong(music[0])
             .then(() => {
-              this.setState((prev) => ({
-                ...prev,
-                loadingFav: true,
-              }));
+              getFavoriteSongs()
+                .then((list) => {
+                  this.setState((prev) => ({
+                    ...prev,
+                    loadingFav: true,
+                    favoritsMusic: list,
+                  }));
+                });
             });
         } else {
           const music = data.filter((e) => e.trackId === id);
           removeSong(music[0])
             .then(() => {
-              this.setState((prev) => ({
-                ...prev,
-                loadingFav: true,
-              }));
+              getFavoriteSongs()
+                .then((list) => {
+                  this.setState((prev) => ({
+                    ...prev,
+                    loadingFav: true,
+                    favoritsMusic: list,
+                  }));
+                });
             });
         }
       });
@@ -78,7 +87,14 @@ class Album extends Component {
           loadingData: true,
         }));
       });
-    const { infosAlbum, data, loadingData, loadingFav } = this.state;
+    getFavoriteSongs()
+      .then((list) => {
+        this.setState((prev) => ({
+          ...prev,
+          favoritsMusic: list,
+        }));
+      });
+    const { infosAlbum, data, loadingData, loadingFav, favoritsMusic } = this.state;
     return (
       <div data-testid="page-album">
         {
@@ -98,6 +114,7 @@ class Album extends Component {
                           trackName={ trackName }
                           previewUrl={ previewUrl }
                           favorite={ this.favorite }
+                          favoritsList={ favoritsMusic }
                         />);
                       }
                       return null;
